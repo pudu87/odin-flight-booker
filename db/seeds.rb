@@ -5,3 +5,24 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+
+airport_list = [
+  [ 'SFO', 'San Francisco' ],
+  [ 'JFK', 'New York' ],
+  [ 'FAE', 'Vágar' ],
+  [ 'CPH', 'Copenhagen' ],
+  [ 'BRU', 'Brussels' ],
+  [ 'AMS', 'Amsterdam' ],
+  [ 'SCL', 'Santiago' ],
+  [ 'EZE', 'Buenos Aires' ],
+  [ 'HKG', 'Hong Kong' ],
+  [ 'CDG', 'Paris' ],
+  [ 'DFW', 'Dallas' ],
+  [ 'RKV', 'Reykjavik' ],
+  [ 'LHR', 'London' ]
+]
+
+airport_list.each do |code, location|
+  Airport.create( code: code, location: location)
+end
