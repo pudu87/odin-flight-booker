@@ -74,3 +74,15 @@ end
     )
   end
 end
+
+9.times do |t|
+  flight_list.each do |to_airport, from_airport, duration|
+    hour = rand_hour
+    Flight.create(
+      from_airport_id: Airport.find_by_code(from_airport).id,
+      to_airport_id: Airport.find_by_code(to_airport).id,
+      duration: duration,
+      departure: "2020-09-0#{t+1} #{hour}:#{rand(6)}0:00"
+    )
+  end
+end
