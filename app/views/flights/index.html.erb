@@ -1,16 +1,36 @@
-<%= form_with model: @flight, local: true, method: 'get' do |f| %>
-  <%= f.label "From:" %>
-  <%= f.select(:from_airport_id, @airports_array) %><br>
-  <%= f.label "To:" %>
-  <%= f.select(:to_airport_id, @airports_array) %><br>
-  <%= f.label "Nr. of passengers:" %>
-  <%= f.select(:nr_of_passengers, [[1,1],[2,2],[3,3],[4,4]]) %><br>
-  <%= f.label "Month:" %>
-  <%= f.select(:month, @months_array) %><br>
-  <%= f.label "Day:" %>
-  <%= f.select(:day, @days_array) %><br>
-  <%= f.submit 'Submit' %>
+<p>Search for flights:</p>
+
+<%= form_with url: flights_path, local: true, method: 'get' do %>
+  <%= label_tag 'From:' %>
+  <%= select_tag(:from_airport_id, options_for_select(@airports_array)) %><br>
+  <%= label_tag 'To:' %>
+  <%= select_tag(:to_airport_id, options_for_select(@airports_array)) %><br>
+  <%= label_tag 'Nr. of passengers:' %>
+  <%= select_tag(:num_passengers, options_for_select([1,2,3,4])) %><br>
+  <%= label_tag 'Month:' %>
+  <%= select_tag(:month, options_for_select(@months_array)) %><br>
+  <%= label_tag 'Day:' %>
+  <%= select_tag(:day, options_for_select(@days_array)) %><br><br>
+  <%= submit_tag 'Search' %>
 <% end %>
 
 <br><br>
+
+<% if @available_flights.any? %>
+  <p>Pick a Flight:<p/>
+  <%= form_with url: flights_path, local: true, method: 'get' do %>
+    <%= hidden_field_tag(:num_passengers, params[:num_passengers]) %>
+    <% @available_flights.each do |flight| %>
+      <%= radio_button_tag(:flight_selection, flight.id) %>
+      <%= label_tag(:flight_selection, "
+        #{Airport.find(flight.from_airport_id).code} - 
+        #{Airport.find(flight.to_airport_id).code}; 
+        Departure: #{flight.departure.strftime("%m-%d %H:%M")}; 
+        Flight Time: #{(flight.duration)/3600}:#{(flight.duration)%3600/60}
+        ") %><br>
+    <% end %><br>
+    <%= submit_tag 'Submit' %>
+  <% end %>
+<% end %>
+
 
