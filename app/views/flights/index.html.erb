@@ -1,0 +1,16 @@
+<%= form_with model: @flight, local: true, method: 'get' do |f| %>
+  <%= f.label "From:" %>
+  <%= f.select(:from_airport_id, @airports_array) %><br>
+  <%= f.label "To:" %>
+  <%= f.select(:to_airport_id, @airports_array) %><br>
+  <%= f.label "Nr. of passengers:" %>
+  <%= f.select(:nr_of_passengers, [[1,1],[2,2],[3,3],[4,4]]) %><br>
+  <%= f.label "Month:" %>
+  <%= f.select(:month, @months_array) %><br>
+  <%= f.label "Day:" %>
+  <%= f.select(:day, @days_array) %><br>
+  <%= f.submit 'Submit' %>
+<% end %>
+
+<br><br>
+

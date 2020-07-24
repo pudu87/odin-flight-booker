@@ -9,4 +9,8 @@ class Flight < ApplicationRecord
     end
     write_attribute(:duration, time)
   end
+
+  def departure_formatted
+    departure.strftime("%m/%d")
+  end
 end
