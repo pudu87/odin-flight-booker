@@ -7,6 +7,8 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 
+# construction of airports-table
+
 airport_list = [
   [ 'SFO', 'San Francisco' ],
   [ 'JFK', 'New York' ],
@@ -23,34 +25,32 @@ airport_list = [
   [ 'LHR', 'London' ]
 ]
 
+airport_list.each do |code, location|
+  Airport.create(code: code, location: location)
+end
+
+
+# construstion of flights-table
+
 flight_list = [
-  [ 'SFO', 'JFK', "04:55" ],
-  [ 'SFO', 'HKG', "14:05" ],
-  [ 'SFO', 'IAH', "03:15" ],
-  [ 'JFK', 'AMS', "07:15" ],
-  [ 'JFK', 'CDG', "07:30" ],
-  [ 'JFK', 'LHR', "07:05" ],
-  [ 'FAE', 'CPH', "02:05" ],
-  [ 'CPH', 'BRU', "01:30" ],
-  [ 'CPH', 'RKV', "03:15" ],
-  [ 'CPH', 'LHR', "02:00" ],
-  [ 'BRU', 'HKG', "11:10" ],
-  [ 'BRU', 'RKV', "03:15" ],
-  [ 'AMS', 'EZE', "13:55" ],
-  [ 'SCL', 'EZE', "02:00" ],
-  [ 'SCL', 'IAH', "09:50" ],
-  [ 'EZE', 'CDG', "13:10" ],
-  [ 'HKG', 'LHR', "11:55" ],
-  [ 'RKV', 'LHR', "03:05" ],
-# busy flight-routes
-  [ 'SFO', 'JFK', "04:55" ],
-  [ 'SFO', 'IAH', "03:15" ],
-  [ 'JFK', 'CDG', "07:30" ],
-  [ 'JFK', 'LHR', "07:05" ],
-  [ 'JFK', 'LHR', "07:05" ],
-  [ 'CPH', 'RKV', "03:15" ],
-  [ 'SCL', 'EZE', "02:00" ],
-  [ 'HKG', 'LHR', "11:55" ]
+  [ 'SFO', 'JFK', "04:55", 2 ],
+  [ 'SFO', 'HKG', "14:05", 1 ],
+  [ 'SFO', 'IAH', "03:15", 2 ],
+  [ 'JFK', 'AMS', "07:15", 1 ],
+  [ 'JFK', 'CDG', "07:30", 2 ],
+  [ 'JFK', 'LHR', "07:05", 2 ],
+  [ 'FAE', 'CPH', "02:05", 1 ],
+  [ 'CPH', 'BRU', "01:30", 1 ],
+  [ 'CPH', 'RKV', "03:15", 1 ],
+  [ 'CPH', 'LHR', "02:00", 1 ],
+  [ 'BRU', 'HKG', "11:10", 0 ],
+  [ 'BRU', 'RKV', "03:15", 0 ],
+  [ 'AMS', 'EZE', "13:55", 1 ],
+  [ 'SCL', 'EZE', "02:00", 2 ],
+  [ 'SCL', 'IAH', "09:50", 1 ],
+  [ 'EZE', 'CDG', "13:10", 1 ],
+  [ 'HKG', 'LHR', "11:55", 2 ],
+  [ 'RKV', 'LHR', "03:05", 1 ],
 ]
 
 def rand_hour
@@ -59,30 +59,43 @@ def rand_hour
   hour
 end
 
-airport_list.each do |code, location|
-  Airport.create(code: code, location: location)
-end
-
-9.times do |t|
-  flight_list.each do |from_airport, to_airport, duration|
-    hour = rand_hour
-    Flight.create(
-      from_airport_id: Airport.find_by_code(from_airport).id,
-      to_airport_id: Airport.find_by_code(to_airport).id,
-      duration: duration,
-      departure: "2020-09-0#{t+1} #{hour}:#{rand(6)}0:00"
-    )
+def create_flights(flight_list, t, frequency)
+  flight_list.each do |from_airport, to_airport, duration, f|
+    if frequency == f
+      hour = rand_hour
+      Flight.create(
+        from_airport_id: Airport.find_by_code(from_airport).id,
+        to_airport_id: Airport.find_by_code(to_airport).id,
+        duration: duration,
+        departure: "2020-09-0#{t+1} #{hour}:#{rand(6)}0:00"
+      )
+      Flight.create(
+          to_airport_id: Airport.find_by_code(from_airport).id,
+          from_airport_id: Airport.find_by_code(to_airport).id,
+          duration: duration,
+          departure: "2020-09-0#{t+1} #{hour}:#{rand(6)}0:00"
+        )
+    end
   end
 end
 
+# weekly routes
+frequency = 0
+3.times do |t|
+  t = (t + 1) * 3
+  create_flights(flight_list, t, frequency)
+end
+
+# daily routes
+frequency = 1
 9.times do |t|
-  flight_list.each do |to_airport, from_airport, duration|
-    hour = rand_hour
-    Flight.create(
-      from_airport_id: Airport.find_by_code(from_airport).id,
-      to_airport_id: Airport.find_by_code(to_airport).id,
-      duration: duration,
-      departure: "2020-09-0#{t+1} #{hour}:#{rand(6)}0:00"
-    )
+  create_flights(flight_list, t, frequency)  
+end
+
+# busy routes
+frequency = 2
+9.times do |t|
+  3.times do
+    create_flights(flight_list, t, frequency) 
   end
 end
