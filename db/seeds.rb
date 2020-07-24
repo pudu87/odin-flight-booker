@@ -7,7 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 
-# construction of airports-table
+# construction of airport-data
 
 airport_list = [
   [ 'SFO', 'San Francisco' ],
@@ -30,7 +30,7 @@ airport_list.each do |code, location|
 end
 
 
-# construstion of flights-table
+# construstion of flight-data
 
 flight_list = [
   [ 'SFO', 'JFK', "04:55", 2 ],
@@ -53,27 +53,21 @@ flight_list = [
   [ 'RKV', 'LHR', "03:05", 1 ],
 ]
 
-def rand_hour
-  hour = 4 + rand(16)
-  hour = "0#{hour}" if hour < 10
-  hour
-end
-
-def create_flights(flight_list, t, frequency)
+def create_flights(flight_list, d, m, frequency)
   flight_list.each do |from_airport, to_airport, duration, f|
     if frequency == f
-      hour = rand_hour
+      # hour = rand_hour
       Flight.create(
         from_airport_id: Airport.find_by_code(from_airport).id,
         to_airport_id: Airport.find_by_code(to_airport).id,
         duration: duration,
-        departure: "2020-09-0#{t+1} #{hour}:#{rand(6)}0:00"
+        departure: "2020-#{'%02d'%(m+9)}-#{'%02d'%(d+1)} #{'%02d'%(4+rand(16))}:#{rand(6)}0:00"
       )
       Flight.create(
           to_airport_id: Airport.find_by_code(from_airport).id,
           from_airport_id: Airport.find_by_code(to_airport).id,
           duration: duration,
-          departure: "2020-09-0#{t+1} #{hour}:#{rand(6)}0:00"
+          departure: "2020-#{'%02d'%(m+9)}-#{'%02d'%(d+1)} #{'%02d'%(4+rand(16))}:#{rand(6)}0:00"
         )
     end
   end
@@ -81,21 +75,27 @@ end
 
 # weekly routes
 frequency = 0
-3.times do |t|
-  t = (t + 1) * 3
-  create_flights(flight_list, t, frequency)
+3.times do |m|
+  10.times do |d|
+    d *= 3
+    create_flights(flight_list, d, m, frequency)
+  end
 end
 
 # daily routes
 frequency = 1
-9.times do |t|
-  create_flights(flight_list, t, frequency)  
+3.times do |m|
+  30.times do |d|
+    create_flights(flight_list, d, m, frequency)  
+  end
 end
 
 # busy routes
 frequency = 2
-9.times do |t|
-  3.times do
-    create_flights(flight_list, t, frequency) 
+3.times do |m|
+  30.times do |d|
+    3.times do
+      create_flights(flight_list, d, m, frequency) 
+    end
   end
 end
