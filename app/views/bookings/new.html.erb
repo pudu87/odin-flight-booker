@@ -9,6 +9,8 @@
 <p>Please fill in all passenger details:</p>
 
 <%= form_with model: @booking, local: true do |f| %>
+  <%= f.hidden_field(:flight_id, value: params[:flight_id]) %>
+  <%= f.hidden_field(:num_passengers, value: params[:num_passengers]) %>
   <%= f.fields_for :passengers do |pass_f| %>
     <div id=passenger_details>
       <p>Passenger <%= pass_f.index + 1 %>:</p>

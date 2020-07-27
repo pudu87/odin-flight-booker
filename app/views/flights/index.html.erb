@@ -21,7 +21,7 @@
   <%= form_with url: new_booking_path, local: true, method: 'get' do %>
     <%= hidden_field_tag(:num_passengers, params[:num_passengers]) %>
     <% @available_flights.each do |flight| %>
-      <%= radio_button_tag(:flight_selection, flight.id) %>
+      <%= radio_button_tag(:flight_id, flight.id) %>
       <%= label_tag(:flight_selection, "
         #{Airport.find(flight.from_airport_id).code} - 
         #{Airport.find(flight.to_airport_id).code}; 
