@@ -1,0 +1,22 @@
+<p>You selected the following flight:</p>
+<ul>
+  <li>Date: <%= @flight.departure.strftime("%m/%d %H:%M") %></li>
+  <li>From: <%= @flight.from_airport.code %></li>
+  <li>To: <%= @flight.to_airport.code %></li>
+  <li>Flight ID: <%= @flight.id %></li>
+</ul>
+
+<p>Please fill in all passenger details:</p>
+
+<%= form_with model: @booking, local: true do |f| %>
+  <%= f.fields_for :passengers do |pass_f| %>
+    <div id=passenger_details>
+      <p>Passenger <%= pass_f.index + 1 %>:</p>
+      <%= pass_f.label 'Name:' %><br>
+      <%= pass_f.text_field :name %><br>
+      <%= pass_f.label 'Email:' %><br>
+      <%= pass_f.text_field :email %><br>
+    </div>
+  <% end %>
+  <%= f.submit 'Submit' %>
+<% end %>

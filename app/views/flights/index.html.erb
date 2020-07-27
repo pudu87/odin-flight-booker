@@ -18,7 +18,7 @@
 
 <% if @available_flights.any? %>
   <p>Pick a Flight:<p/>
-  <%= form_with url: flights_path, local: true, method: 'get' do %>
+  <%= form_with url: new_booking_path, local: true, method: 'get' do %>
     <%= hidden_field_tag(:num_passengers, params[:num_passengers]) %>
     <% @available_flights.each do |flight| %>
       <%= radio_button_tag(:flight_selection, flight.id) %>
