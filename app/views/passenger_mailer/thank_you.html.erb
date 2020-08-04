@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <p>Hi <%= @passenger.name %>, <p>
+    <p>
+      Thanks for booking your flight with Odin Flights!<br>
+      You will be flying from <%= @flight.from_airport.code %> to 
+      <%= @flight.to_airport.code %> at <%= @flight.departure.strftime("%m/%d %H:%M") %>.
+    </p>
+    <p>Don't be late and wear a mask.<p/>
+  </body>
+</html>
